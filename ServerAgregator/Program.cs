@@ -60,42 +60,80 @@ namespace ServerAgregator
                 status = "link";
             } else if (status == "link")
             {
-                if (e.Message.Text != "")
+                if ((e.Message.Text != "") && (e.Message.Text != "!stop"))
                 {
-                    
-                    
-                    
-                _bot.Api.Messages.Send(new MessagesSendParams()
-                {
-                    Message = "С ссылкой разобрались, а теперь иди нахуй",
-                    PeerId = chatId,
-                    RandomId = Environment.TickCount
-                });
-                link = e.Message.Text;
-                
-                    status = "start";
-                    _bot.Api.Messages.Send(new MessagesSendParams()
+                    if (e.Message.Text.Contains("zoom.us"))
                     {
-                        Message = $"Короче вот твои мудацкие данные: {name} {link}",
-                        PeerId = chatId,
-                        RandomId = Environment.TickCount
-                    });
+
+                        _bot.Api.Messages.Send(new MessagesSendParams()
+                        {
+                            Message = "С ссылкой разобрались, а теперь иди нахуй",
+                            PeerId = chatId,
+                            RandomId = Environment.TickCount
+                        });
+                        link = e.Message.Text;
+
+                        status = "start";
+                        _bot.Api.Messages.Send(new MessagesSendParams()
+                        {
+                            Message = $"Короче вот твои мудацкие данные: {name} {link}",
+                            PeerId = chatId,
+                            RandomId = Environment.TickCount
+                        });
+                    }
+                    else
+                    {
+                        _bot.Api.Messages.Send(new MessagesSendParams()
+                        {
+                            Message = "Ну ты короче клоун ссылка то нихуя не зумовская\nПопробуй снова еблан либо напиши !stop",
+                            PeerId = chatId,
+                            RandomId = Environment.TickCount
+                        }); 
+                    }
                 }
-                else if(e.Message.Attachments[0].Type == typeof(Link))
-                //else
+                
+                
+                else if( e.Message.Attachments.Count !=0  &&  e.Message.Attachments[0].Type == typeof(Link))
                 {
                     
                     Attachment link1 = new Attachment();
                     
+                    
+                    
+                    
                     link1 = e.Message.Attachments[0];
                     link = link1.Instance.ToString();
-                    status = "start";
+
+                    if (link.Contains("zoom.us"))
+                    {
+                        status = "start";
+                        _bot.Api.Messages.Send(new MessagesSendParams()
+                        {
+                            Message = $"Короче вот твои мудацкие данные: {name} {link}",
+                            PeerId = chatId,
+                            RandomId = Environment.TickCount
+                        });
+                       
+                    }
+                    else
+                    {
+                        _bot.Api.Messages.Send(new MessagesSendParams()
+                        {
+                            Message = "Ну ты короче клоун ссылка то нихуя не зумовская\nПопробуй снова еблан либо напиши !stop",
+                            PeerId = chatId,
+                            RandomId = Environment.TickCount
+                        }); 
+                    }
+                }
+                else if (e.Message.Text == "!stop")
+                {
                     _bot.Api.Messages.Send(new MessagesSendParams()
                     {
-                        Message = $"Короче вот твои мудацкие данные: {name} {link}",
+                        Message = "Чтобы начать напиши !start",
                         PeerId = chatId,
                         RandomId = Environment.TickCount
                     });
+                    status = "start";
                 }
             }
             else
