@@ -8,6 +8,9 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.0" />
+      <PackageReference Include="SQLite" Version="3.13.0" />
+      <PackageReference Include="System.Data.SQLite" Version="1.0.115.5" />
       <PackageReference Include="VkBotFramework" Version="1.0.0" />
     </ItemGroup>
 
