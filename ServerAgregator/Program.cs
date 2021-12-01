@@ -109,7 +109,6 @@ namespace ServerAgregator
                 _command.ExecuteNonQuery();
                 _reader = _command.ExecuteReader();
                 _reader.Read();
-                //      Console.WriteLine(_reader.GetValue(1).ToString());
                 status = _reader.GetValue(3).ToString();
                 _reader.Close();
             }
