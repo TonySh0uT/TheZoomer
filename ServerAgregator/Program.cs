@@ -98,8 +98,6 @@ namespace ServerAgregator
                 _reader = _command.ExecuteReader();
                 var value = _reader.Read();
                 _reader.Close();
-
-
                 if (value == false)
                 {
                     _command.CommandText =
