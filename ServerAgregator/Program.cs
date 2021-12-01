@@ -54,11 +54,7 @@ namespace ServerAgregator
                 return false;
             }
         }
-
-
-        public static void statusChecker()
-        {
-        }
+        
 
 
         public static void Main(string[] args)
@@ -107,9 +103,7 @@ namespace ServerAgregator
                 if (value == false)
                 {
                     _command.CommandText =
-                        $"INSERT INTO [PersonalData] VALUES ('{e.Message.PeerId}','','', '','','');";
-                    _command.ExecuteNonQuery();
-                    _command.CommandText = $"UPDATE PersonalData SET status = 'start' WHERE id = {e.Message.PeerId};";
+                        $"INSERT INTO [PersonalData] VALUES ('{e.Message.PeerId}','','', 'start','','');";
                     _command.ExecuteNonQuery();
                 }
 
@@ -325,8 +319,6 @@ namespace ServerAgregator
                     });
                     _command.CommandText = $"UPDATE PersonalData SET status = 'start' WHERE id = {e.Message.PeerId};";
                     _command.ExecuteNonQuery();
-                    //   _command.CommandText = $"UPDATE PersonalData SET status = 'start' WHERE id = {e.Message.PeerId};";
-                    //   _command.ExecuteNonQuery();
                 }
                 else
                 {
@@ -343,17 +335,6 @@ namespace ServerAgregator
                     _command.ExecuteNonQuery();
                 }
             }
-            /*
-            else if(e.Message.Text == "!help")
-            {
-                _bot.Api.Messages.Send(new MessagesSendParams()
-                {
-                    Message = "Для того, чтобы остановить напиши !stop",
-                    PeerId = chatId,
-                    RandomId = Environment.TickCount
-                });  
-            }
-            */
             else if (e.Message.Text == "!Данные")
             {
                 KeyboardBuilder keyData = new KeyboardBuilder();
