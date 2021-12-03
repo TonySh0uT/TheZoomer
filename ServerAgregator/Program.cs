@@ -20,10 +20,9 @@ namespace ServerAgregator
         private static SQLiteDataReader _reader;
         private static SQLiteCommand _command;
 
-        private static string AccessToken =
-            "82245a591340d96dd1c0ae108441550b88698bace68001d0ed91f57545efd144ce10c8e2a53d872a0cadf";
+        private static string accessToken = "82245a591340d96dd1c0ae108441550b88698bace68001d0ed91f57545efd144ce10c8e2a53d872a0cadf";
 
-        private static string GroupUrl = "https://vk.com/thezoomerproject";
+        private static string groupUrl = "https://vk.com/ucheckproject";
         private static VkBot _bot;
 
         private static string name;
@@ -33,9 +32,9 @@ namespace ServerAgregator
 
         static public void dbCreate()
         {
-            if (!File.Exists(@"TheZoomer/Database/statusDb.db"))
+            if (!File.Exists(@"Database/statusDb.db"))
             {
-                SQLiteConnection.CreateFile(@"TheZoomer/Database/statusDb.db");
+                SQLiteConnection.CreateFile(@"Database/statusDb.db");
             }
         }
 
@@ -60,7 +59,7 @@ namespace ServerAgregator
         public static void Main(string[] args)
         {
             dbCreate();
-            if (dbConnect(@"TheZoomer/Database/statusDb.db"))
+            if (dbConnect(@"Database/statusDb.db"))
             {
                 _command = new SQLiteCommand(_connection)
                 {
@@ -72,7 +71,8 @@ namespace ServerAgregator
                 _connection.Close();
             }
 
-            _bot = new VkBot(AccessToken, GroupUrl);
+            _bot = new VkBot(accessToken, groupUrl);
+            //_bot = new VkBot(accessToken, groupUrl);
             Console.WriteLine("Bot started.\n");
             _bot.OnMessageReceived += BotOnOnMessageReceived;
             _bot.Start();
@@ -84,7 +84,7 @@ namespace ServerAgregator
             var chatId = e.Message.PeerId;
             status = "";
             _command = new SQLiteCommand();
-            dbConnect(@"TheZoomer/Database/statusDb.db");
+            dbConnect(@"Database/statusDb.db");
 
             {
                 _command = new SQLiteCommand(_connection)
