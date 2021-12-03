@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerAgregator", "ServerAgregator\ServerAgregator.csproj", "{F3EB5881-DDFC-4E18-956D-14B45090EFAE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZoomPart", "ZoomPart\ZoomPart.csproj", "{D3ABCE18-8992-463F-B218-E1A6519B89D4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,11 @@ Global
 		{F3EB5881-DDFC-4E18-956D-14B45090EFAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F3EB5881-DDFC-4E18-956D-14B45090EFAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F3EB5881-DDFC-4E18-956D-14B45090EFAE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3ABCE18-8992-463F-B218-E1A6519B89D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3ABCE18-8992-463F-B218-E1A6519B89D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3ABCE18-8992-463F-B218-E1A6519B89D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3ABCE18-8992-463F-B218-E1A6519B89D4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
 	EndGlobalSection
 EndGlobal
