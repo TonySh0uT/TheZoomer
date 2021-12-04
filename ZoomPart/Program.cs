@@ -16,6 +16,7 @@ namespace ZoomPart
             try
             {
                 IWebElement launch = browser.FindElement(By.CssSelector("div[role='button']"));
+                Console.WriteLine("Another try");
             }
             catch
             {
@@ -23,42 +24,71 @@ namespace ZoomPart
                 loadCheckingWhileJoining(browser);
             }
         }
-        
-        
+
+
+        public static void loadFirst(IWebDriver browser)
+        {
+            try
+            {
+                try
+                {
+                    IWebElement joinFromBrowserBtn = browser.FindElement(By.LinkText("Join from Your Browser"));
+                    joinFromBrowserBtn.Click();
+                    Console.WriteLine("He found it 2");
+                }
+                catch
+                {
+                    IWebElement joinFromBrowserBtn = browser.FindElement(By.LinkText("Войдите с помощью браузера"));
+                    joinFromBrowserBtn.Click();
+                    Console.WriteLine("He found it 3");
+                }
+            }
+            catch
+            {
+                Thread.Sleep(3000);
+                loadFirst(browser);
+                Console.WriteLine("Another try");
+            }
+        }
         
         
         
         public static void Main(string[] args)
         {
-            var firefoxOptions = new OpenQA.Selenium.Firefox.FirefoxOptions();
-            //firefoxOptions.AddArguments("--headless");
-            var firefoxDriverService = FirefoxDriverService.CreateDefaultService();
-            IWebDriver browser = new FirefoxDriver(firefoxDriverService, firefoxOptions);
-            browser.Navigate().GoToUrl("https://us04web.zoom.us/j/72064796115?pwd=RnV0YzFsT1NGMlhJWGpxZlY0MjRuQT09");
-            loadCheckingWhileJoining(browser);
-            try
+
+
+
+            for (int i = 0; i < 3; i++)
             {
-                IWebElement joinFromBrowser = browser.FindElement(By.LinkText("Войдите с помощью браузера"));
+                //string username = args[0].ToString();
+                string username = "Cock ";
+                var firefoxOptions = new OpenQA.Selenium.Firefox.FirefoxOptions();
+                firefoxOptions.AddArguments("--headless");
+                var firefoxDriverService = FirefoxDriverService.CreateDefaultService();
+                IWebDriver browser = new FirefoxDriver(firefoxDriverService, firefoxOptions);
+                browser.Navigate()
+                    .GoToUrl("https://us04web.zoom.us/j/75496093147?pwd=VUxvb2NOeVdNdUZFSGJ1VEJhTEdVUT09");
+                loadCheckingWhileJoining(browser);
+                try
+                {
+                    IWebElement joinFromBrowser = browser.FindElement(By.LinkText("Join from Your Browser"));
+                }
+                catch
+                {
+                    IWebElement launch = browser.FindElement(By.CssSelector("div[role='button']"));
+                    Console.WriteLine("He found it");
+                    launch.Click();
+                    Thread.Sleep(2000);
+                }
+                loadFirst(browser);
+
+                IWebElement name = browser.FindElement(By.Name("inputname"));
+                name.SendKeys($"{username + i.ToString()}");
+                IWebElement joinBtn = browser.FindElement(By.ClassName("submit"));
+                joinBtn.Click();
+                Thread.Sleep(5000);
             }
-            catch
-            {
-                IWebElement launch = browser.FindElement(By.CssSelector("div[role='button']"));
-                launch.Click();
-            }
-           
-            IWebElement joinFromBrowserBtn = browser.FindElement(By.LinkText("Войдите с помощью браузера"));
-            joinFromBrowserBtn.Click();
-            IWebElement name = browser.FindElement(By.Name("inputname"));
-            name.SendKeys("Игорь");
-            IWebElement joinBtn = browser.FindElement(By.ClassName("submit"));
-            joinBtn.Click();
-            
-            
-            
-            Thread.Sleep(15000);
-            
-            
-            
+
         }
     }
 }

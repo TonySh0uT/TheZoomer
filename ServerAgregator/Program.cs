@@ -8,6 +8,7 @@ using VkNet.Model.Attachments;
 using VkNet.Model.RequestParams;
 using VkNet.Model.Keyboard;
 using System.Data.SQLite;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection.Emit;
 using VkNet.Enums.SafetyEnums;
@@ -85,12 +86,15 @@ namespace ServerAgregator
             status = "";
             _command = new SQLiteCommand();
             dbConnect(@"Database/statusDb.db");
+            Console.WriteLine(e.Message.PeerId);
+            Console.WriteLine(e.Message.FromId);
+            Console.WriteLine(e.Message.Text);
 
             {
                 _command = new SQLiteCommand(_connection)
                 {
                     CommandText =
-                        $"SELECT id FROM [PersonalData] WHERE id={e.Message.PeerId};"
+                        $"SELECT id FROM [PersonalData] WHERE id={e.Message.FromId};"
                 };
 
                 Console.WriteLine(_command.CommandText);
@@ -101,11 +105,11 @@ namespace ServerAgregator
                 if (value == false)
                 {
                     _command.CommandText =
-                        $"INSERT INTO [PersonalData] VALUES ('{e.Message.PeerId}','','', 'start','','');";
+                        $"INSERT INTO [PersonalData] VALUES ('{e.Message.FromId}','','', 'start','','');";
                     _command.ExecuteNonQuery();
                 }
 
-                _command.CommandText = $"SELECT * FROM [PersonalData] WHERE id={e.Message.PeerId};";
+                _command.CommandText = $"SELECT * FROM [PersonalData] WHERE id={e.Message.FromId};";
                 _command.ExecuteNonQuery();
                 _reader = _command.ExecuteReader();
                 _reader.Read();
@@ -131,7 +135,7 @@ namespace ServerAgregator
                     Keyboard = keyboardStart
                 });
 
-                _command.CommandText = $"UPDATE PersonalData SET status = 'refill' WHERE id = {e.Message.PeerId};";
+                _command.CommandText = $"UPDATE PersonalData SET status = 'refill' WHERE id = {e.Message.FromId};";
                 _command.ExecuteNonQuery();
             }
             else if (e.Message.Text == "!Заполнить" && (status == "refill"))
@@ -149,7 +153,7 @@ namespace ServerAgregator
                     Keyboard = keyboardFill
                 });
 
-                _command.CommandText = $"UPDATE PersonalData SET status = 'name' WHERE id = {e.Message.PeerId};";
+                _command.CommandText = $"UPDATE PersonalData SET status = 'name' WHERE id = {e.Message.FromId};";
                 _command.ExecuteNonQuery();
             }
             else if (status == "name" && e.Message.Text != "!Стоп" && e.Message.Text != "!Данные")
@@ -165,10 +169,10 @@ namespace ServerAgregator
                     RandomId = Environment.TickCount,
                     Keyboard = keyboardFill
                 });
-                _command.CommandText = $"UPDATE PersonalData SET status = 'link' WHERE id = {e.Message.PeerId};";
+                _command.CommandText = $"UPDATE PersonalData SET status = 'link' WHERE id = {e.Message.FromId};";
                 _command.ExecuteNonQuery();
                 _command.CommandText =
-                    $"UPDATE PersonalData SET name = '{e.Message.Text}' WHERE id = {e.Message.PeerId};";
+                    $"UPDATE PersonalData SET name = '{e.Message.Text}' WHERE id = {e.Message.FromId};";
                 _command.ExecuteNonQuery();
             }
             else if (status == "link" && e.Message.Text != "!Стоп" && e.Message.Text != "!Данные")
@@ -192,10 +196,10 @@ namespace ServerAgregator
 
 
                         _command.CommandText =
-                            $"UPDATE PersonalData SET status = 'message' WHERE id = {e.Message.PeerId};";
+                            $"UPDATE PersonalData SET status = 'message' WHERE id = {e.Message.FromId};";
                         _command.ExecuteNonQuery();
                         _command.CommandText =
-                            $"UPDATE PersonalData SET link = '{e.Message.Text}' WHERE id = {e.Message.PeerId};";
+                            $"UPDATE PersonalData SET link = '{e.Message.Text}' WHERE id = {e.Message.FromId};";
                         _command.ExecuteNonQuery();
                     }
                     else
@@ -230,10 +234,10 @@ namespace ServerAgregator
                             Keyboard = keyboardlink
                         });
                         _command.CommandText =
-                            $"UPDATE PersonalData SET status = 'message' WHERE id = {e.Message.PeerId};";
+                            $"UPDATE PersonalData SET status = 'message' WHERE id = {e.Message.FromId};";
                         _command.ExecuteNonQuery();
                         _command.CommandText =
-                            $"UPDATE PersonalData SET link = '{link}' WHERE id = {e.Message.PeerId};";
+                            $"UPDATE PersonalData SET link = '{link}' WHERE id = {e.Message.FromId};";
                         _command.ExecuteNonQuery();
                     }
                     else
@@ -261,10 +265,10 @@ namespace ServerAgregator
                     RandomId = Environment.TickCount,
                     Keyboard = keyboardMessage
                 });
-                _command.CommandText = $"UPDATE PersonalData SET status = 'start' WHERE id = {e.Message.PeerId};";
+                _command.CommandText = $"UPDATE PersonalData SET status = 'start' WHERE id = {e.Message.FromId};";
                 _command.ExecuteNonQuery();
                 _command.CommandText =
-                    $"UPDATE PersonalData SET message = '{e.Message.Text}' WHERE id = {e.Message.PeerId};";
+                    $"UPDATE PersonalData SET message = '{e.Message.Text}' WHERE id = {e.Message.FromId};";
                 _command.ExecuteNonQuery();
 
 
@@ -286,12 +290,12 @@ namespace ServerAgregator
                     RandomId = Environment.TickCount,
                     Keyboard = keyboardStop
                 });
-                _command.CommandText = $"UPDATE PersonalData SET status = 'start' WHERE id = {e.Message.PeerId};";
+                _command.CommandText = $"UPDATE PersonalData SET status = 'start' WHERE id = {e.Message.FromId};";
                 _command.ExecuteNonQuery();
             }
             else if (e.Message.Text == "!Запустить")
             {
-                _command.CommandText = $"SELECT * FROM [PersonalData] WHERE id={e.Message.PeerId};";
+                _command.CommandText = $"SELECT * FROM [PersonalData] WHERE id={e.Message.FromId};";
                 _command.ExecuteNonQuery();
                 _reader = _command.ExecuteReader();
                 _reader.Read();
@@ -314,7 +318,36 @@ namespace ServerAgregator
                         RandomId = Environment.TickCount,
                         Keyboard = keyboardSend
                     });
-                    _command.CommandText = $"UPDATE PersonalData SET status = 'start' WHERE id = {e.Message.PeerId};";
+                        
+                    string cmd = "./ZoomPart SimpleName"; 
+                            var process = new Process
+                            {
+                                StartInfo = new ProcessStartInfo
+                                {
+                                    FileName = "/bin/bash",
+                                    Arguments = $"-c \"{cmd}\"",
+                                    RedirectStandardInput = true,
+                                    RedirectStandardOutput = true,
+                                    RedirectStandardError = true,
+                                    UseShellExecute = false,
+                                    CreateNoWindow = true
+                                },
+                                EnableRaisingEvents = true
+                            };
+
+                            process.Start();
+                            process.BeginOutputReadLine();
+                            process.BeginErrorReadLine();
+
+
+
+
+
+
+
+
+
+                            _command.CommandText = $"UPDATE PersonalData SET status = 'start' WHERE id = {e.Message.FromId};";
                     _command.ExecuteNonQuery();
                 }
                 else
@@ -328,18 +361,18 @@ namespace ServerAgregator
                         RandomId = Environment.TickCount,
                         Keyboard = keyboardSend
                     });
-                    _command.CommandText = $"UPDATE PersonalData SET status = 'start' WHERE id = {e.Message.PeerId};";
+                    _command.CommandText = $"UPDATE PersonalData SET status = 'start' WHERE id = {e.Message.FromId};";
                     _command.ExecuteNonQuery();
                 }
             }
-            else if (e.Message.Text == "!Данные")
+            else if (e.Message.Text == "!Данные" )
             {
                 KeyboardBuilder keyData = new KeyboardBuilder();
                 keyData.AddButton("!Запустить", "", KeyboardButtonColor.Positive);
                 keyData.AddButton("!Заполнить", "", KeyboardButtonColor.Negative);
                 keyData.AddButton("!Данные", "", KeyboardButtonColor.Primary);
                 MessageKeyboard keyboardData = keyData.Build();
-                _command.CommandText = $"SELECT * FROM [PersonalData] WHERE id={e.Message.PeerId};";
+                _command.CommandText = $"SELECT * FROM [PersonalData] WHERE id={e.Message.FromId};";
                 _command.ExecuteNonQuery();
                 _reader = _command.ExecuteReader();
                 _reader.Read();
